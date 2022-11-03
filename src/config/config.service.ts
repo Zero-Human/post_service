@@ -18,6 +18,7 @@ export class MySqlConfigService implements TypeOrmOptionsFactory {
       synchronize: this.configService.get<boolean>('SYNCHRONIZE'),
       logging: this.configService.get<boolean>('LOGGING'),
       charset: this.configService.get<string>('CHARSET'),
+      timezone: this.configService.get<string>('TIMEZONE'),
     };
   }
 }
