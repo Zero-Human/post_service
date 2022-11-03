@@ -15,6 +15,12 @@ export class PostsService {
     return await this.postRepository.save(post);
   }
   async findPostOrderBy(offset: number) {
-    return await this.postRepository.findOrderByCreateAt(offset);
+    const data = await this.postRepository.findOrderByCreateAt(offset);
+    return data;
+  }
+  async findPostById(id: number) {
+    return await this.postRepository.findOne({
+      where: { id: id },
+    });
   }
 }
