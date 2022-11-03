@@ -14,4 +14,7 @@ export class PostsService {
     const post = this.postRepository.create(createPosts);
     return await this.postRepository.save(post);
   }
+  async findPostOrderBy(offset: number) {
+    return await this.postRepository.findOrderByCreateAt(offset);
+  }
 }

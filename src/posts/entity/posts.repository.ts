@@ -2,17 +2,18 @@ import { Post } from './post.entity';
 import { Repository } from 'typeorm';
 
 export interface PostsRepository extends Repository<Post> {
-  findPostByPassword(password: string): Promise<Post>;
+  findOrderByCreateAt(offset: number): Promise<Post>;
 }
 
-type CustomUserRepository = Pick<PostsRepository, 'findPostByPassword'>;
+type CustomUserRepository = Pick<PostsRepository, 'findOrderByCreateAt'>;
 
 export const customPostsRepositoryMethods: CustomUserRepository = {
-  async findPostByPassword(password: string): Promise<Post> {
+  async findOrderByCreateAt(offset: number): Promise<Post> {
     try {
-      console.log(this);
       return await this.createQueryBuilder('posts')
-        .where('posts.password = :password', { password })
+        .orderBy('posts.created_at', 'DESC')
+        .offset(offset)
+        .limit(20)
         .getMany();
     } catch (e) {
       console.log(e);
