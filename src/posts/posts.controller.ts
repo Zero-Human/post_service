@@ -6,7 +6,7 @@ import { PostsService } from './posts.service';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
   @Post('')
-  async getMyInfo(@Body() createPosts: CreatePostsDto) {
+  async createPost(@Body() createPosts: CreatePostsDto) {
     await this.postsService.createPosts(createPosts);
     return Object.assign({
       statusCode: 201,
