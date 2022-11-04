@@ -1,21 +1,29 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { PostDto } from './dto/post.dto';
+import { CreatePost } from './dto/create-post.dto';
+import { UpdatePost } from './dto/update-post.dto';
+
 import { PostsService } from './posts.service';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
+
   @Post('')
-  async createPost(@Body() createPosts: PostDto) {
+  @UsePipes(ValidationPipe)
+  async createPost(@Body() createPosts: CreatePost) {
     await this.postsService.createPosts(createPosts);
     return Object.assign({
       statusCode: 201,
@@ -24,8 +32,9 @@ export class PostsController {
   }
 
   @Get('')
-  async getPost(@Query('offset') offset: number) {
-    offset = offset ? offset : 0;
+  async getPost(
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
+  ) {
     const data = await this.postsService.findPostOrderBy(offset);
     return Object.assign({
       statusCode: 200,
@@ -34,7 +43,7 @@ export class PostsController {
   }
 
   @Get(':id')
-  async getPostDetail(@Param('id') id: number) {
+  async getPostDetail(@Param('id', ParseIntPipe) id: number) {
     const data = await this.postsService.findPostById(id);
     return Object.assign({
       statusCode: 200,
@@ -43,7 +52,11 @@ export class PostsController {
   }
 
   @Patch(':id')
-  async updatePost(@Param('id') id: number, @Body() updatePost: PostDto) {
+  @UsePipes(ValidationPipe)
+  async updatePost(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePost: UpdatePost,
+  ) {
     await this.postsService.updatePost(id, updatePost);
     return Object.assign({
       statusCode: 200,
@@ -53,7 +66,7 @@ export class PostsController {
 
   @Delete(':id')
   async deletePost(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body('password') password: string,
   ) {
     await this.postsService.deletePost(id, password);

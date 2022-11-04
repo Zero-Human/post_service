@@ -6,7 +6,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { PostDto } from '../dto/post.dto';
+import { UpdatePost } from '../dto/update-post.dto';
 
 @Entity('posts')
 export class Post {
@@ -29,7 +29,7 @@ export class Post {
   async saveEncryptedPassword() {
     this.password = await bcrypt.hash(this.password, 5);
   }
-  update(dto: PostDto): Post {
+  update(dto: UpdatePost): Post {
     this.content = dto?.content;
     this.title = dto?.title;
     return this;

@@ -4,10 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostDto } from './dto/post.dto';
+import { UpdatePost } from './dto/update-post.dto';
+
 import { Post } from './entity/post.entity';
 import { PostsRepository } from './entity/posts.repository';
 import * as bcrypt from 'bcrypt';
+import { CreatePost } from './dto/create-post.dto';
 @Injectable()
 export class PostsService {
   constructor(
@@ -15,7 +17,7 @@ export class PostsService {
     private readonly postRepository: PostsRepository,
   ) {}
 
-  async createPosts(createPosts: PostDto) {
+  async createPosts(createPosts: CreatePost) {
     const post = this.postRepository.create(createPosts);
     await this.postRepository.save(post);
   }
@@ -29,7 +31,7 @@ export class PostsService {
     });
   }
 
-  async updatePost(id: number, updatePost: PostDto) {
+  async updatePost(id: number, updatePost: UpdatePost) {
     let post = await this.postRepository.findOne({
       select: { password: true },
       where: { id },
