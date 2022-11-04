@@ -44,10 +44,22 @@ export class PostsController {
 
   @Patch(':id')
   async updatePost(@Param('id') id: number, @Body() updatePost: PostDto) {
-    const data = await this.postsService.updatePost(id, updatePost);
+    await this.postsService.updatePost(id, updatePost);
     return Object.assign({
       statusCode: 200,
-      data,
+      message: '게시물 수정에 성공하였습니다.',
+    });
+  }
+
+  @Delete(':id')
+  async deletePost(
+    @Param('id') id: number,
+    @Body('password') password: string,
+  ) {
+    await this.postsService.deletePost(id, password);
+    return Object.assign({
+      statusCode: 200,
+      message: '게시물 삭제에 성공하였습니다.',
     });
   }
 }

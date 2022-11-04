@@ -17,7 +17,7 @@ export class PostsService {
 
   async createPosts(createPosts: PostDto) {
     const post = this.postRepository.create(createPosts);
-    return await this.postRepository.save(post);
+    await this.postRepository.save(post);
   }
   async findPostOrderBy(offset: number) {
     const data = await this.postRepository.findOrderByCreateAt(offset);
@@ -38,14 +38,28 @@ export class PostsService {
       throw new NotFoundException(`${id}`);
     }
 
-    if (!this.isPassword(post.password, post.password)) {
+    if (!this.isPassword(post.password, updatePost.password)) {
       throw new BadRequestException('비밀번호가 다릅니다.');
     }
     post = post.update(updatePost);
-    return await this.postRepository.update(id, post);
+    await this.postRepository.update(id, post);
+  }
+
+  async deletePost(id: number, password: string) {
+    const post = await this.postRepository.findOne({
+      select: { password: true },
+      where: { id },
+    });
+    if (!post) {
+      throw new NotFoundException(`${id}`);
+    }
+    if (!this.isPassword(post.password, password)) {
+      throw new BadRequestException('비밀번호가 다릅니다.');
+    }
+    return await this.postRepository.delete(id);
   }
 
   isPassword(password: string, passwordCheck: string): boolean {
-    return bcrypt.compareSync(password, passwordCheck);
+    return bcrypt.compareSync(passwordCheck, password);
   }
 }
