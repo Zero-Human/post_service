@@ -37,7 +37,7 @@ export class PostsService {
       where: { id },
     });
     if (!post) {
-      throw new NotFoundException(`${id}`);
+      throw new NotFoundException('경로가 잘못되었습니다.');
     }
 
     if (!this.isPassword(post.password, updatePost.password)) {
@@ -53,7 +53,7 @@ export class PostsService {
       where: { id },
     });
     if (!post) {
-      throw new NotFoundException(`${id}`);
+      throw new NotFoundException('경로가 잘못되었습니다.');
     }
     if (!this.isPassword(post.password, password)) {
       throw new BadRequestException('비밀번호가 다릅니다.');
