@@ -26,9 +26,13 @@ export class PostsService {
     return data;
   }
   async findPostById(id: number) {
-    return await this.postRepository.findOne({
+    const post = await this.postRepository.findOne({
       where: { id: id },
     });
+    if (!post) {
+      throw new NotFoundException('경로가 잘못되었습니다.');
+    }
+    return post;
   }
 
   async updatePost(id: number, updatePost: UpdatePost) {

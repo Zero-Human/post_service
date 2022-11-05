@@ -8,7 +8,10 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     PostsModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
+    }),
     TypeOrmModule.forRootAsync({
       imports: [MySqlConfigModule],
       useClass: MySqlConfigService,

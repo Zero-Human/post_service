@@ -69,7 +69,7 @@ export class PostsController {
     @Param('id', ParseIntPipe) id: number,
     @Body('password') password: string,
   ) {
-    await this.postsService.deletePost(id, password);
+    await this.postsService.deletePost(id, password.toString());
     return Object.assign({
       statusCode: 200,
       message: '게시물 삭제에 성공하였습니다.',
