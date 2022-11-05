@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { Repository } from 'typeorm';
-import { Post } from './../src/posts/entity/post.entity';
+import { Post } from '../src/posts/entity/post.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -31,6 +31,19 @@ describe('AppController (e2e)', () => {
     const data = {
       title: 'title',
       content: 'content',
+      password: '123456',
+    };
+
+    await request(app.getHttpServer()).post('/posts').send(data).expect({
+      statusCode: 201,
+      message: '게시물 생성에 성공하였습니다.',
+    });
+  });
+
+  it('/posts post - 성공 제목, 본문 이모지 추가', async () => {
+    const data = {
+      title: 'title😄',
+      content: 'content😇',
       password: '123456',
     };
 
