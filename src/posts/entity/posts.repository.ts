@@ -5,9 +5,9 @@ export interface PostsRepository extends Repository<Post> {
   findOrderByCreateAt(offset: number): Promise<Post>;
 }
 
-type CustomUserRepository = Pick<PostsRepository, 'findOrderByCreateAt'>;
+type CustomPostsRepository = Pick<PostsRepository, 'findOrderByCreateAt'>;
 
-export const customPostsRepositoryMethods: CustomUserRepository = {
+export const customPostsRepositoryMethods: CustomPostsRepository = {
   async findOrderByCreateAt(offset: number): Promise<Post> {
     return await this.createQueryBuilder('posts')
       .orderBy('posts.created_at', 'DESC')
